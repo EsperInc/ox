@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:20.0'
+    implementation 'com.google.code.gson:gson:2.3'
+    implementation 'org.objenesis:objenesis:2.1'
+    testImplementation 'junit:junit:4.12'
+}
+
+publishing {
+    publications {
+        ox(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'localRepo'
+            url = "file://" + System.getProperty("user.home") + "/gradle-repo"
+        }
+    }
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+group = 'org.mirraj2'
+version = '0.0.1'
