@@ -27,17 +27,6 @@ public class Reflection {
 
   private static final Objenesis objenesis = new ObjenesisStd(true);
   private static final Map<String, Field> fieldCache = Maps.newConcurrentMap();
-  private static final Field modifiersField;
-
-  static {
-    disableWarning();
-    try {
-      modifiersField = Field.class.getDeclaredField("modifiers");
-    } catch (Exception e) {
-      throw propagate(e);
-    }
-    modifiersField.setAccessible(true);
-  }
 
   /**
    * Turns off the warning that puts 5 warnings out to the console:
@@ -76,7 +65,6 @@ public class Reflection {
     }
     try {
       field.setAccessible(true);
-      modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       return (T) field.get(o);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -91,7 +79,6 @@ public class Reflection {
     }
     try {
       field.setAccessible(true);
-      modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
       Class<?> type = field.getType();
       if (value instanceof String) {
